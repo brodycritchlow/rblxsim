@@ -1,5 +1,5 @@
 body {
-  height: 25vh;
+  height: 100vh;
   margin: 0;
   font-family: "Nunito Sans";
   font-size: 10px;
@@ -48,7 +48,7 @@ img {
 }
 
 .card-wrapper {
-  margin-top: 500em;
+  margin-top: 1em;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 1em;
