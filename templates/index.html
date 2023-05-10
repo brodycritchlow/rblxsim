@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RBLX SIM</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito Sans">
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/just-sans">
+  <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}"">
+  <script>
+    const sleep=e=>new Promise(t=>setTimeout(t,e,"done sleeping"));function check(e){return 200==e.status?"Successfully, sold!":"Failed to sell item."}function sell(e){var t=e.closest("div").parentNode.querySelector(".card-info").querySelector(".item-name").innerText;e.closest("div").parentElement.remove(),fetch("/sell/"+encodeURIComponent(t),{method:"POST"}).then(e=>console.log(check(e))).catch(e=>console.error(e)),sleep(1e3),location.reload()}async function getItems(){fetch("/click/").then(e=>e.json()).then(e=>{document.querySelector("#item1").innerText="$"+Math.round(e.new).toLocaleString()})}async function trade(e){var t=e.closest("div").querySelector(".item-name").innerText;e.closest("div").querySelector(".item-rap").innerText.replaceAll("$","").replaceAll(",",""),document.location="/trade_offers/"+encodeURIComponent(t)}
+  </script>
+</head>
+<body class="centered-children">
+  <div class="content-wrapper">
+    <div class="content-header rap-total">
+      <span id="item1">${{ current_currency[0]|intcomma }}</span>
+      <br>
+      <button class="button" onclick="location.reload()">Refresh</button>
+      <button class="button" onclick="getItems()">CLICK</button>
+      <button class="button" onclick="location.href='/market'">MARKET</button>
+      <button class="button" onclick="location.href='/coinflip'">COINFLIP</button>
+    </div>
+    <div class="card-wrapper">
+      {% for item in items %}
+      <div class="card">
+        <img src="{{ item[-1] }}">
+        <div class="card-info">
+          <div class="card-title item-name">{{ item[0] }}</div>
+          <div class="card-subtitle item-rap">${{ item[1]|intcomma }}</div>
+        </div>
+        <div class="selection-container">
+          <button class="button selection-button" onclick="sell(this)">Sell</button>
+          <button class="button selection-button green" onclick="trade(this)">Trade</button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>

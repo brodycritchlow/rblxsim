@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RBLX SIM - Coinflip</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito Sans">
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/just-sans">
+  <link rel="stylesheet" href="{{ url_for('static', filename='coinflip.css') }}">
+  <script>
+    const sleep = (e) => new Promise(t => setTimeout(t, e, "done sleeping"));
+    
+    function check(response) {
+      if (response.status === 200) {
+        return "Success!";
+      } else {
+        return "Failed to place bet.";
+      }
+    }
+    
+    function placeBet() {
+      const input = document.getElementById("betInput");
+      const bet = input.value;
+      if (bet) {
+        fetch(`/bet/${bet}`, {
+          method: "POST"
+        }).then(function(response) {
+            // response.json() returns a promise, use the same .then syntax to work with the results
+            response.json().then(function(data){
+                // users is now our actual variable parsed from the json, so we can use it
+                coin.querySelector('#heads').style.display = data.flip === 'Heads' ? 'block' : 'none';
+                coin.querySelector('#tails').style.display = data.flip === 'Tails' ? 'block' : 'none';
+            });
+        }).catch(err => console.error(err));
+        input.value = "";
+        // sleep(1000);
+        // location.reload();
+      }
+    }
+  </script>
+</head>
+<body class="centered-children">
+  <div class="content-wrapper">
+    <div class="content-header rap-total">
+      <span id="item1">${{ current_currency[0]|intcomma }}</span>
+      <br>
+      <button class="button" onclick="location.reload()">Refresh</button>
+      <button class="button" onclick="location.href='/market'">MARKET</button>
+      <button class="button" onclick="location.href='/'">HOME</button>
+    </div>
+    <div class="card-wrapper">
+      <div class="card">
+        <div class="card-info">
+          <div class="card-title item-name">Coinflip</div>
+          <div class="card-subtitle item-rap">Bet your current currency: ${{ current_currency[0]|intcomma }}</div>
+        </div>
+        <div class="selection-container">
+          <input type="number" id="betInput" min="1" placeholder="Enter your bet amount...">
+          <button class="button selection-button green" onclick="placeBet()">Place Bet</button>
+        </div>
+      </div>
+      <div id="coin" onclick="placeBet()">
+        <img id="heads" src="./static/HEADS.jpg">
+        <img id="tails" src="./static/TAILS.jpg">
+      </div>
+    </div>
+  </div>
+</body>
+</html>

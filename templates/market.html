@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RBLX SIM - Market</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito Sans">
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/just-sans">
+  <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}"">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body class="centered-children">
+  <div class="content-wrapper">
+    <div class="content-header rap-total">
+      <span id="item1">${{ current_currency[0]|intcomma }}</span>
+      <br>
+      <button class="button" onclick="location.reload()">Refresh</button>
+      <button class="button" onclick="getItems()">CLICK</button>
+      <button class="button" onclick="location.href='/'">HOME</button>
+    </div>
+    <div class="card-wrapper">
+      {% for item in market_items %}
+      <div class="card">
+        <img src="{{ item.item_url }}">
+        <div class="card-info">
+          <div class="card-title item-name">{{ item.item_name }}</div>
+          <div class="card-subtitle item-rap">${{ item.default_value|intcomma }}</div>
+        </div>
+        <div class="selection-container">
+          <button class="button selection-button green" onclick="buy(this)"><i class="fas fa-shopping-cart"></i> Buy</button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <script>
+    function buy(element) {
+        var item_name = element.closest(".card").querySelector(".item-name").innerText;
+        var item_price = element.closest(".card").querySelector(".item-rap").innerText.replaceAll("$","").replaceAll(",","");
+        element.closest(".card").remove();
+
+        const data = {
+            "item_name": item_name,
+            "item_rap": item_price
+        };
+        fetch('/buy/', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+            console.log('Item bought successfully.');
+            location.reload();
+            } else {
+            console.error('Failed to buy item.');
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+  </script>
+</body>
+</html>
