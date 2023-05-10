@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RBLX SIM</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito Sans">
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/just-sans">
+  <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}"">
+  <script src="{{ url_for('static', filename='index.js') }}"></script>
+</head>
+<body class="centered-children">
+  <div class="content-wrapper">
+    <div class="content-header rap-total">
+      <span id="item1">${{ current_currency[0]|intcomma }}</span>
+      <br>
+      <button class="button" onclick="location.reload()">Refresh</button>
+      <button class="button" onclick="getItems()">CLICK</button>
+    </div>
+    <div class="card-wrapper">
+      {% for item in items %}
+      <div class="card">
+        <img src="{{ item[-1] }}">
+        <div>
+          <div class="card-title item-name">{{ item[0] }}</div>
+          <div class="card-subtitle item-rap">${{ item[1]|intcomma }}</div>
+        </div>
+        <div class="selection-container">
+          <button class="button selection-button" onclick="sell(this)">Sell</button>
+          <button class="button selection-button green" onclick="trade(this)">Trade</button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>
