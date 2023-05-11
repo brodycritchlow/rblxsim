@@ -35,8 +35,8 @@ async function getItems() {
         });
 }
 async function trade(elem) {
-    var item_name = elem.closest("div").querySelector(".item-name").innerText
-    var item_rap = elem.closest("div").querySelector(".item-rap").innerText.replaceAll("$", "").replaceAll(",", "");
+    var item_name = elem.closest("div").parentNode.querySelector(".card-info").querySelector(".item-name").innerText;
+    var item_rap = elem.closest("div").parentNode.querySelector(".card-info").querySelector(".item-rap").innerText.replaceAll("$", "").replaceAll(",", "");
     
     document.location = '/trade_offers/' + encodeURIComponent(item_name)
 }

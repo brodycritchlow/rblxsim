@@ -2,37 +2,37 @@ body {
     margin: 0;
     font-family: "Nunito Sans";
     font-size: 10px;
-  }
-  
-  .rap-total {
+}
+
+.rap-total {
     padding-top: 2em;
     position: relative;
-  }
-  
-  img {
+}
+
+img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-  }
-  
-  .centered-children {
+}
+
+.centered-children {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .content-wrapper {
+}
+
+.content-wrapper {
     width: 50em;
     height: auto;
     display: grid;
-  }
-  
-  .content-header {
+}
+
+.content-header {
     font-size: 2em;
-  }
-  
-  .button {
-    font-size: 0.6em;
+}
+
+.button {
+    font-size: 0.7em;
     width: auto;
     padding: 0.3em 0.8em 0.3em 0.8em;
     border-radius: 5px;
@@ -41,62 +41,68 @@ body {
     border-style: none;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
-  }
-  
-  .button:hover {
+}
+
+.button:hover {
     background: #4b87e7;
-  }
-  
-  .card-wrapper {
+}
+
+.card-wrapper {
     margin-top: 1em;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 1em;
-  }
-  
-  .card {
-    padding: 2em;
-    height: auto;
-    border-radius: 5px;
-    box-shadow: 0 0 15px 2px #e8e8e8;
-    display: grid;
-    grid-template-rows: 2fr auto 0.3fr;
-    grid-gap: 0.5em;
-    transition: all 0.5s ease-in-out;
-  }
-  
-  .card:hover {
-    transform: scale(1.02);
-  }
-  
-  .card-title {
-    font-family: "JUST Sans";
-    font-size: 1.5em;
-  }
-  
-  .card-subtitle {
-    font-size: 1.2em;
-  }
-  
-  .selection-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 0.5em;
-  }
-  
-  .selection-button {
+}
+
+.card {
+  padding: 1em;
+  height: auto;
+  border-radius: 5px;
+  box-shadow: 0 0 15px 2px #e8e8e8;
+  display: grid;
+  grid-template-rows: auto;
+  grid-gap: 0.25em;
+}
+
+.data-wrapper {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  grid-gap: 0.5em;
+}
+
+.card-title {
+  font-family: "JUST Sans";
+  font-size: 1.5em;
+}
+
+.card-subtitle {
+  font-size: 1.2em;
+}
+
+.selection-container {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-gap: 1em;
+}
+
+.selection-button {
     font-family: "Nunito Sans";
     font-size: 1.2em;
     width: 100%;
-  }
-  
-  .green {
+}
+
+.item-name {
+  font-size: 2em;
+}
+
+.item-rap {
+  font-size: 1.5em;
+}
+
+.green {
     background: #00d6ab;
-  }
-  
-  .green:hover {
+}
+
+.green:hover {
     background: #00bd97;
-  }
+}
 
 .coin {
     height: 100px;
@@ -107,9 +113,9 @@ body {
     position: relative;
     perspective: 1000px;
     transition: transform 0.5s;
-  }
-  
-  .coin:after {
+}
+
+.coin:after {
     content: "";
     position: absolute;
     top: 0;
@@ -119,10 +125,10 @@ body {
     background: linear-gradient(to right, #ffd200, #fff);
     transform: rotateY(-180deg);
     border-radius: 50%;
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
-  }
-  
-  .coin:before {
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.coin:before {
     background-image: url("https://www.rbxflip.com/_next/image?url=%2Fimg%2FTAILS.png&w=96&q=100");
     content: "";
     position: absolute;
@@ -133,39 +139,58 @@ body {
     background: linear-gradient(to right, #ffd200, #fff);
     transform: rotateX(-90deg);
     border-radius: 50%;
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
-  }
-  
-  .coin.heads {
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.coin.heads {
     transform: rotateY(540deg);
-  }
-  
-  .coin.tails:after {
+}
+
+.coin.tails:after {
     transform: rotateY(0deg);
-  }
-  
-  .coin.tails:before {
+}
+
+.coin.tails:before {
     transform: rotateX(0deg);
-  }
+}
+
+#coin {
+  cursor: pointer;
+  grid-column: 2;
   
-  #coin img {
-    margin: 3em;
-    width: 100px;
-    height: 100px;
-    display: none;
-    
-  }
-  
-  #heads {
-    z-index: 1;
-  }
-  
-  #tails {
-    z-index: 2;
-  }
+}
+
+.selection-button:not(:active) {
+    /* now keep red background for 1s */
+    transition: flip 1s ease-in-out;
+}
+
+.selection-button:active {
+    background: red;
+}
+
+#coin img {
+  margin: 3em;
+  width: 100px;
+  height: 100px;
+  transition: all 0.3s ease-in-out;
+}
 
   
-  
-  
-  
-  
+#coin img:hover {
+  transform: scale(1.04);
+}
+
+#betInput {
+  outline: 0;
+  border-radius: 3px;
+  border-color: #c2c2c2;
+  border-style: solid;
+  font-family: "Nunito Sans";
+  transition: all 0.3s ease-in-out;
+  padding: 0.2em 0.4em 0.2em 0.4em;
+}
+
+#betInput:focus {
+  border-color: #4d91ff;
+}

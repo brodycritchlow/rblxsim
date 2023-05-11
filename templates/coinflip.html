@@ -5,6 +5,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito Sans">
   <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/just-sans">
   <link rel="stylesheet" href="{{ url_for('static', filename='coinflip.css') }}">
+
   <script>
     const sleep = (e) => new Promise(t => setTimeout(t, e, "done sleeping"));
     
@@ -26,8 +27,15 @@
             // response.json() returns a promise, use the same .then syntax to work with the results
             response.json().then(function(data){
                 // users is now our actual variable parsed from the json, so we can use it
-                coin.querySelector('#heads').style.display = data.flip === 'Heads' ? 'block' : 'none';
-                coin.querySelector('#tails').style.display = data.flip === 'Tails' ? 'block' : 'none';
+                if (data.flip == "Heads" && data.success == true) {
+                //   document.getElementById("coinImage").setAttribute("id", "coinImage anim")
+                  sleep(1000)
+                  document.getElementById("coinImage").src = "./static/HEADS.jpg"
+                } else {
+                //   document.getElementById("coinImage").setAttribute("id", "coinImage anim")
+                  sleep(1000)
+                  document.getElementById("coinImage").src = "./static/TAILS.jpg"
+                }
             });
         }).catch(err => console.error(err));
         input.value = "";
@@ -43,23 +51,25 @@
       <span id="item1">${{ current_currency[0]|intcomma }}</span>
       <br>
       <button class="button" onclick="location.reload()">Refresh</button>
-      <button class="button" onclick="location.href='/market'">MARKET</button>
-      <button class="button" onclick="location.href='/'">HOME</button>
+      <button class="button" onclick="location.href='/market'">Market</button>
+      <button class="button" onclick="location.href='/'">Home</button>
     </div>
     <div class="card-wrapper">
       <div class="card">
-        <div class="card-info">
-          <div class="card-title item-name">Coinflip</div>
-          <div class="card-subtitle item-rap">Bet your current currency: ${{ current_currency[0]|intcomma }}</div>
+        <div class="data-wrapper">
+          <div class="card-info">
+            <div class="card-title item-name">Coinflip</div>
+            <div class="card-subtitle item-rap">Bet your current currency: ${{ current_currency[0]|intcomma }}</div>
+          </div>
+          <div class="selection-container">
+            <input type="number" id="betInput" min="1" placeholder="Enter your bet amount...">
+            <button class="button selection-button green" onclick="placeBet()">Place Bet</button>
+          </div>
         </div>
-        <div class="selection-container">
-          <input type="number" id="betInput" min="1" placeholder="Enter your bet amount...">
-          <button class="button selection-button green" onclick="placeBet()">Place Bet</button>
+        <div id="coin" onclick="placeBet()">
+          <!-- <img id="heads" src="heads.png"> -->
+          <img id="coinImage" src="./static/gray.png">
         </div>
-      </div>
-      <div id="coin" onclick="placeBet()">
-        <img id="heads" src="./static/HEADS.jpg">
-        <img id="tails" src="./static/TAILS.jpg">
       </div>
     </div>
   </div>

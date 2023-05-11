@@ -1,1 +1,82 @@
-<!-- we need to implement this -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RBLX SIM - Trade Offers</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito Sans">
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/just-sans">
+  <link rel="stylesheet" href="{{ url_for('static', filename='trade.css') }}">
+  <script>
+    function accept(elem) {
+            // Get the item you are trading from item_data
+            const itemName = "{{ item_data[0] }}";
+            // Create an array to hold the item names of the trade offers
+            const itemNames = [];
+            const values = [];
+            // Loop through all the item_name td elements and push their text content to the array
+            const item_name_elements = document.querySelectorAll(".card-title");
+            const value_elements = document.querySelectorAll(".card-subtitle");
+
+            for (let i = 0; i < item_name_elements.length; i++) {
+                itemNames.push(item_name_elements[i].textContent);
+            }
+
+            for (let i = 0; i < value_elements.length; i++) {
+                values.push(value_elements[i].textContent);
+            }
+
+            console.log("Item you are trading:", itemName);
+            console.log("Items being offered:", itemNames);
+
+            // Send a POST request to /accept/ with the data
+            fetch('/accept/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    itemName: itemName,
+                    itemNames: itemNames,
+                    defaultValues: values
+                })
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
+            document.location = "/"
+        }
+  </script>
+</head>
+<body class="centered-children">
+  <div class="content-wrapper">
+    <div class="content-header">
+      <p class="title">Trade Offers for {{ item_data[0][0] }}</p>
+    </div>
+      <div class="card-wrapper">
+        <h2>Your Items</h2>
+        {% for trade in item_data %}
+        <div class="card">
+          <div class="card-info">
+            <div class="card-title item-name">{{ trade[0] }}</div>
+            <div class="card-subtitle item-rap">{{ trade[1]|intcomma }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-wrapper">
+        {% endfor %}
+        <h2>Offer's Items</h2>
+        {% for trade in trades %}
+        <div class="card">
+          <div class="card-info">
+            <div class="card-title item-name">{{ trade[0] }}</div>
+            <div class="card-subtitle item-rap">{{ trade[1]|intcomma }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <button class="button selection-button green" onclick="accept(this)">Confirm Trade</button>
+      <button class="button selection-button blue" onclick="location.href='/'">Go Back</button>
+    </div>
+    
+  </div>
+</body>
+</html>
