@@ -49,30 +49,37 @@ def market():
     )
 
 
-@app.route("/sell/<item_name>", methods=["POST", "GET"])
-def sell_item(item_name):
+@app.route("/sell", methods=["POST"])
+def sell_items():
+    items = request.json.get("item_names", [])
+    print(items)
+    total_rap = 0
+
     conn = sqlite3.connect("./databases/items.db")
     c = conn.cursor()
-    c.execute("SELECT rap, count FROM items WHERE item_name = ?", (item_name,))
 
-    result = c.fetchone()
-    if result is None:
-        conn.close()
-        return jsonify({"success": False, "message": "Item not found"})
+    for item_name in items:
+        c.execute("SELECT rap, count FROM items WHERE item_name = ?", (item_name,))
 
-    total_rap, count = result
-    if count == 1:
-        c.execute("DELETE FROM items WHERE item_name = ?", (item_name,))
-    else:
-        c.execute(
-            "UPDATE items SET count = count - 1 WHERE item_name = ?", (item_name,)
-        )
+        result = c.fetchone()
+        if result is None:
+            conn.close()
+            return jsonify({"success": False, "message": f"Item '{item_name}' not found"})
+
+        item_rap, count = result
+        if count == 1:
+            c.execute("DELETE FROM items WHERE item_name = ?", (item_name,))
+        else:
+            c.execute(
+                "UPDATE items SET count = count - 1 WHERE item_name = ?", (item_name,)
+            )
+
+        total_rap += item_rap
 
     conn.commit()
     conn.close()
 
     profit = total_rap * 0.7
-
     update_money_in_db(profit)
 
     return jsonify({"success": True, "rap": total_rap})
@@ -101,27 +108,35 @@ def buy_item():
         return jsonify({"success": True})
 
 
-@app.route("/trade_offers/<item_name>")
-def trade_offers(item_name):
+@app.route("/trade_offers", methods=["POST", "GET"])
+def trade_offers():
+    item_names = request.json.get("item_names", [])
+    print(item_names)
     conn = sqlite3.connect("./databases/items.db")
     c = conn.cursor()
-    c.execute("SELECT * FROM items WHERE item_name = ?", (item_name,))
-    item_data = c.fetchone()
 
-    # print(item_data)
+    total_rap = 0
+    item_data = []
+    trades = []
+    for item_name in item_names:
+        c.execute("SELECT * FROM items WHERE item_name = ?", (item_name,))
+        item = c.fetchone()
+
+        if item:
+            item_data.append(item)
+            trade_offers = get_trade_offers(item, item_name)
+            total_rap += sum(offer[1] for offer in trade_offers)
+            trades.extend(trade_offers)
+
     conn.close()
 
     if not item_data:
         return jsonify({"success": False})
 
-    trade_offers = get_trade_offers(item_data, item_name)
-
-    total_rap = sum(item[1] for item in trade_offers)
-
     return render_template(
         "trade_offers.html",
-        item_data=[item_data],
-        trades=sorted(trade_offers, key=lambda x: x[1], reverse=True),
+        item_data=item_data,
+        trades=sorted(trades, key=lambda x: x[1], reverse=True),
         total_rap=total_rap,
     )
 

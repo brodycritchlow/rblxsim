@@ -15,7 +15,6 @@ locale.setlocale(locale.LC_ALL, "")
 
 
 def intcomma(value):
-    print(value)
     return locale.format_string("%d", int(value), grouping=True)
 
 

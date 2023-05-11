@@ -67,6 +67,7 @@ img {
 
 .card:hover {
   transform: scale(1.02);
+  border: blue 1px solid;
 }
 
 .card-title {
@@ -96,4 +97,8 @@ img {
 
 .green:hover {
   background: #00bd97;
+}
+
+.selected {
+  border: blue 1px solid;
 }
